@@ -1,0 +1,15 @@
+body {
+    font-family: sans-serif;
+}
+
+.wrapper {
+    text-align: center;
+}
+
+.container {
+    display: inline-block;
+}
+
+canvas {
+    border: 1px solid black;
+}
