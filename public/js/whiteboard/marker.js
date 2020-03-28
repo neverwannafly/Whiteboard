@@ -1,6 +1,6 @@
 class Marker {
     constructor() {
-        this.color;
+        this.color = COLOR_BLACK;
         this.radius = 1;
     }
     setColor(context, color) {
