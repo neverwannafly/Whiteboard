@@ -18,6 +18,7 @@ class Whiteboard {
         this._penDownHandler = null;
         this._penUpHandler = null;
         this._executeActionHandler = null;
+        this._scrollHandler = null;
     }
     _setupContextBoard() {
         this.canvas.style.width = `${this.width}px`;
@@ -40,13 +41,16 @@ class Whiteboard {
     }
     _penDown(event) {
         this._saveBuffer();
-        this.currX = event.clientX - this.origin.x
-        this.currY = event.clientY - this.origin.y;
+        this.currX = event.pageX - this.origin.x
+        this.currY = event.pageY - this.origin.y;
         this.setState(STATE_PEN_DOWN);
     }
     _penUp(event) {
         this._draw(event);
         this._loadBuffer();
+    }
+    _scroll(_) {
+        // this.origin = this.canvas.getBoundingClientRect();
     }
     _loadBuffer() {
         this.setState(this.buffer.state);
@@ -59,8 +63,8 @@ class Whiteboard {
         this.buffer.width = this.getWidth();
     }
     _draw(event) {
-        const nextX = event.clientX - this.origin.x;
-        const nextY = event.clientY - this.origin.y;
+        const nextX = event.pageX - this.origin.x;
+        const nextY = event.pageY - this.origin.y;
         this.marker.draw(this.context, this.currX, this.currY, nextX, nextY);
         this.currX = nextX;
         this.currY = nextY;
@@ -72,21 +76,24 @@ class Whiteboard {
         }
         this._draw(event);
     }
-    _line(event) {
+    _line(_) {
         console.log("making line! Keep going");
     }
     startEventLoop() {
         if (this._penDownHandler===null)        {  this._penDownHandler = this._penDown.bind(this); }
         if (this._executeActionHandler===null)  { this._executeActionHandler = this._executeAction.bind(this); }
         if (this._penUpHandler===null)          { this._penUpHandler = this._penUp.bind(this); }
+        if (this._scrollHandler===null)         { this._scrollHandler = this._scroll.bind(this); }
         this.canvas.addEventListener('mousedown', this._penDownHandler, true);
         this.canvas.addEventListener('mousemove', this._executeActionHandler, true);
         this.canvas.addEventListener('mouseup', this._penUpHandler, true);
+        this.canvas.addEventListener('scroll', this._scrollHandler, true);
     }
     stopEventLoop() {
         this.canvas.removeEventListener('mousedown', this._penDownHandler, true);
         this.canvas.removeEventListener('mousemove', this._executeActionHandler, true);
         this.canvas.removeEventListener('mouseup', this._penUpHandler, true);
+        this.canvas.removeEventListener('scroll', this._scrollHandler, true);
     }    
     setBackground(background) {
         this.background = background;
