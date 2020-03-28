@@ -6,6 +6,7 @@ const RESOLUTION_LOW          =     0.5;
 
 // Colors
 const COLOR_RED                   =       "#FF0000";
-const COLOR_BLUE                  =       "#00FF00";
-const COLOR_GREEN                 =       "#0000FF";
+const COLOR_BLUE                  =       "#0000FF";
+const COLOR_GREEN                 =       "#00FF00";
 const COLOR_BLACK                 =       "#000000";
+const COLOR_PINK                  =       "#FF00FF";
