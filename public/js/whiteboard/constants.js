@@ -16,6 +16,7 @@ const COLOR_WHITE                   =       "#FFFFFF";
 const MODE_IDLE                     =       0b0000;  
 const MODE_DRAW                     =       0b0001;
 const MODE_ERASE                    =       0b0010;
+const MODE_LINE                     =       0b0011;
 
 // Whiteboard States
 const STATE_PEN_UP                  =       false;

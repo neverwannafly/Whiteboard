@@ -33,6 +33,7 @@ class Whiteboard {
             switch(this.mode) {
                 case MODE_DRAW      : this._draw(event); break;
                 case MODE_ERASE     : this._erase(event); break;
+                case MODE_LINE      : this._line(event); break;
                 case MODE_IDLE      : console.log("I'm on a break!"); break;
             }
         }
@@ -41,11 +42,6 @@ class Whiteboard {
         this._saveBuffer();
         this.currX = event.clientX - this.origin.x
         this.currY = event.clientY - this.origin.y;
-        switch(this.mode) {
-            case MODE_DRAW      : break;
-            case MODE_ERASE     : this.setColor(this.background); this.setWidth(5*this.getWidth()); break;
-            case MODE_IDLE      : break;
-        }
         this.setState(STATE_PEN_DOWN);
     }
     _penUp(event) {
@@ -70,7 +66,14 @@ class Whiteboard {
         this.currY = nextY;
     }
     _erase(event) {
+        if (this.getColor() != this.background) {
+            this.setColor(this.background);
+            this.setWidth(this.getWidth() * 5);
+        }
         this._draw(event);
+    }
+    _line(event) {
+        console.log("making line! Keep going");
     }
     startEventLoop() {
         if (this._penDownHandler===null)        {  this._penDownHandler = this._penDown.bind(this); }
@@ -87,7 +90,6 @@ class Whiteboard {
     }    
     setBackground(background) {
         this.background = background;
-        console.log(this.context.globalCompositeOperation);
         this.context.globalCompositeOperation = 'destination-over';
         this.context.fillStyle = this.background;
         this.context.fillRect(0, 0, this.width, this.height);
@@ -102,7 +104,7 @@ class Whiteboard {
         return this.marker.getColor();
     }
     setWidth(width) {
-        this.marker.setRadius(width);
+        this.marker.setRadius(this.context, width);
     }
     getWidth() {
         return this.marker.getRadius();

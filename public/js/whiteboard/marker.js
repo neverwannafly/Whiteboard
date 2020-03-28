@@ -6,9 +6,11 @@ class Marker {
     setColor(context, color) {
         this.color = color;
         context.fillStyle = this.color;
+        context.strokeStyle = this.color;
     }
-    setRadius(radius) {
+    setRadius(context, radius) {
         this.radius = radius;
+        context.lineWidth = this.radius;
     }
     getColor() {
         return this.color;
@@ -18,8 +20,6 @@ class Marker {
     }
     draw(context, x1, y1, x2, y2) {
         context.beginPath();
-        context.strokeStyle = this.color;
-        context.lineWidth = this.radius;
         context.moveTo(x1, y1);
         context.lineTo(x2, y2);
         context.stroke();
