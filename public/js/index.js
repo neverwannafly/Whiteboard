@@ -2,7 +2,7 @@
 
     const canvas = document.getElementById("whiteboard");
 
-    const resolution = RESOLUTION_HD;
+    const resolution = RESOLUTION_HIGH;
     const height = window.innerHeight * 0.95;
     const width = window.outerWidth * 0.95;
     
