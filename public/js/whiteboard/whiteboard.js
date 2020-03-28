@@ -12,10 +12,11 @@ class Whiteboard {
         this.origin = this.canvas.getBoundingClientRect();
         this.currX = 0;
         this.currY = 0;
+        this.background = COLOR_WHITE;
         // Event Handlers
         this._penDownHandler = null;
         this._penUpHandler = null;
-        this._drawHandler = null;
+        this._executeActionHandler = null;
     }
     _setupContextBoard() {
         this.canvas.style.width = `${this.width}px`;
@@ -26,16 +27,24 @@ class Whiteboard {
         context.scale(this.resolution, this.resolution);
         return context;
     }
-    _draw(event) {
+    _executeAction(event) {
         if (this.state == STATE_PEN_DOWN) {
-            if (this.mode == MODE_DRAW) {
-                const nextX = event.clientX - this.origin.x;
-                const nextY = event.clientY - this.origin.y;
-                this.marker.draw(this.context, this.currX, this.currY, nextX, nextY);
-                this.currX = nextX;
-                this.currY = nextY;
+            switch(this.mode) {
+                case MODE_DRAW      : this._draw(event); break;
+                case MODE_ERASE     : this._erase(event); break;
+                case MODE_IDLE      : console.log("I'm on a break!"); break;
             }
         }
+    }
+    _draw(event) {
+        const nextX = event.clientX - this.origin.x;
+        const nextY = event.clientY - this.origin.y;
+        this.marker.draw(this.context, this.currX, this.currY, nextX, nextY);
+        this.currX = nextX;
+        this.currY = nextY;
+    }
+    _erase(event) {
+        console.log(event);
     }
     _penDown(event) {
         this.state = STATE_PEN_DOWN;
@@ -47,18 +56,26 @@ class Whiteboard {
         this.state = STATE_PEN_UP;
     }
     startEventLoop() {
-        if (this._penDownHandler===null)    { this._penDownHandler = this._penDown.bind(this); }
-        if (this._drawHandler===null)       { this._drawHandler = this._draw.bind(this); }
-        if (this._penUpHandler===null)      { this._penUpHandler = this._penUp.bind(this); }
+        if (this._penDownHandler===null)        {  this._penDownHandler = this._penDown.bind(this); }
+        if (this._executeActionHandler===null)  { this._executeActionHandler = this._executeAction.bind(this); }
+        if (this._penUpHandler===null)          { this._penUpHandler = this._penUp.bind(this); }
         this.canvas.addEventListener('mousedown', this._penDownHandler, true);
-        this.canvas.addEventListener('mousemove', this._drawHandler, true);
+        this.canvas.addEventListener('mousemove', this._executeActionHandler, true);
         this.canvas.addEventListener('mouseup', this._penUpHandler, true);
     }
     stopEventLoop() {
         this.canvas.removeEventListener('mousedown', this._penDownHandler, true);
-        this.canvas.removeEventListener('mousemove', this._drawHandler, true);
+        this.canvas.removeEventListener('mousemove', this._executeActionHandler, true);
         this.canvas.removeEventListener('mouseup', this._penUpHandler, true);
     }    
+    setBackground(background) {
+        this.background = background;
+        console.log(this.context.globalCompositeOperation);
+        this.context.globalCompositeOperation = 'destination-over';
+        this.context.fillStyle = this.background;
+        this.context.fillRect(0, 0, this.width, this.height);
+        this.context.globalCompositeOperation = 'source-over';
+    }
     setColor(color) {
         this.marker.setColor(this.context, color);
     }
