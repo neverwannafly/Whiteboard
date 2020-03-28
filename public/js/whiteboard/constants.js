@@ -10,6 +10,7 @@ const COLOR_BLUE                    =       "#0000FF";
 const COLOR_GREEN                   =       "#00FF00";
 const COLOR_BLACK                   =       "#000000";
 const COLOR_PINK                    =       "#FF00FF";
+const COLOR_WHITE                   =       "#FFFFFF";
 
 // Drawing Modes
 const MODE_IDLE                     =       0b0000;  
