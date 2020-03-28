@@ -5,12 +5,18 @@ const RESOLUTION_STANDARD           =       1;
 const RESOLUTION_LOW                =     0.5;
 
 // Colors
-const COLOR_RED                     =       "#FF0000";
-const COLOR_BLUE                    =       "#0000FF";
-const COLOR_GREEN                   =       "#00FF00";
-const COLOR_BLACK                   =       "#000000";
-const COLOR_PINK                    =       "#FF00FF";
-const COLOR_WHITE                   =       "#FFFFFF";
+const COLOR_RED                     =       "#FF0000FF";
+const COLOR_BLUE                    =       "#0000FFFF";
+const COLOR_GREEN                   =       "#00FF00FF";
+const COLOR_BLACK                   =       "#101820FF";
+const COLOR_PINK                    =       "#FF00FFFF";
+const COLOR_WHITE                   =       "#FFFFFFFF";
+const COLOR_ULTRA_VIOLET            =       "#5F4B8BFF";
+const COLOR_BLOOMING_DAHILA         =       "#E69A8DFF";
+const COLOR_ORANGE                  =       "#F95700FF";
+const COLOR_LIGHT_BLUE              =       "#00539CFF";
+const COLOR_ROYAL_BLUE              =       "#00A4CCFF";
+const COLOR_PEACH                   =       "#EEA47FFF";
 
 // Drawing Modes
 const MODE_IDLE                     =       0b0000;  
