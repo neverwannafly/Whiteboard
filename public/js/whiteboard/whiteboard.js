@@ -1,15 +1,21 @@
 class Whiteboard {
     constructor(canvas, width, height, resolution) {
+        // Class members
         this.canvas = canvas;
         this.height = height;
         this.width = width;
         this.resolution = resolution;
         this.context = this._setupContextBoard();
         this.marker = new Marker();
-        this.drawMode = false;
-        this.origin = null;
+        this.mode = MODE_IDLE;
+        this.state = STATE_PEN_UP;
+        this.origin = this.canvas.getBoundingClientRect();
         this.currX = 0;
         this.currY = 0;
+        // Event Handlers
+        this._penDownHandler = null;
+        this._penUpHandler = null;
+        this._drawHandler = null;
     }
     _setupContextBoard() {
         this.canvas.style.width = `${this.width}px`;
@@ -20,63 +26,46 @@ class Whiteboard {
         context.scale(this.resolution, this.resolution);
         return context;
     }
-    _draw(x1, y1, x2, y2) {
-        if (this.drawMode) {
-            this.marker.draw(this.context, x1, y1, x2, y2);
+    _draw(event) {
+        if (this.state == STATE_PEN_DOWN) {
+            if (this.mode == MODE_DRAW) {
+                const nextX = event.clientX - this.origin.x;
+                const nextY = event.clientY - this.origin.y;
+                this.marker.draw(this.context, this.currX, this.currY, nextX, nextY);
+                this.currX = nextX;
+                this.currY = nextY;
+            }
         }
     }
-    _penDown() {
-        this.drawMode = true;
+    _penDown(event) {
+        this.state = STATE_PEN_DOWN;
+        this.currX = event.clientX - this.origin.x
+        this.currY = event.clientY - this.origin.y;
     }
-    _penUp() {
-        this.drawMode = false
+    _penUp(event) {
+        this._draw(event);
+        this.state = STATE_PEN_UP;
     }
     startEventLoop() {
-        this.origin = this.canvas.getBoundingClientRect();
-
-        this.canvas.addEventListener('mousedown', (event) => {
-            this._penDown();
-            this.currX = event.clientX - this.origin.x
-            this.currY = event.clientY - this.origin.y;
-        });
-        this.canvas.addEventListener('mousemove', event => {
-            const nextX = event.clientX - this.origin.x;
-            const nextY = event.clientY - this.origin.y;
-            this._draw(this.currX, this.currY, nextX, nextY);
-            this.currX = nextX;
-            this.currY = nextY;
-        });
-        this.canvas.addEventListener('mouseup', (event) => {
-            const nextX = event.clientX - this.origin.x;
-            const nextY = event.clientY - this.origin.y;
-            this._draw(this.currX, this.currY, nextX, nextY);
-            this._penUp();
-        });
+        if (this._penDownHandler===null)    { this._penDownHandler = this._penDown.bind(this); }
+        if (this._drawHandler===null)       { this._drawHandler = this._draw.bind(this); }
+        if (this._penUpHandler===null)      { this._penUpHandler = this._penUp.bind(this); }
+        this.canvas.addEventListener('mousedown', this._penDownHandler, true);
+        this.canvas.addEventListener('mousemove', this._drawHandler, true);
+        this.canvas.addEventListener('mouseup', this._penUpHandler, true);
     }
     stopEventLoop() {
-        this.canvas.removeEventListener('mousedown', (event) => {
-            this._penDown();
-            this.currX = event.clientX - this.origin.x
-            this.currY = event.clientY - this.origin.y;
-        });
-        this.canvas.removeEventListener('mousemove', event => {
-            const nextX = event.clientX - this.origin.x;
-            const nextY = event.clientY - this.origin.y;
-            this._draw(this.currX, this.currY, nextX, nextY);
-            this.currX = nextX;
-            this.currY = nextY;
-        });
-        this.canvas.removeEventListener('mouseup', (event) => {
-            const nextX = event.clientX - this.origin.x;
-            const nextY = event.clientY - this.origin.y;
-            this._draw(this.currX, this.currY, nextX, nextY);
-            this._penUp();
-        });
+        this.canvas.removeEventListener('mousedown', this._penDownHandler, true);
+        this.canvas.removeEventListener('mousemove', this._drawHandler, true);
+        this.canvas.removeEventListener('mouseup', this._penUpHandler, true);
     }    
     setColor(color) {
         this.marker.setColor(this.context, color);
     }
     setWidth(width) {
         this.marker.setRadius(width);
+    }
+    setMode(mode) {
+        this.mode = mode;
     }
 };
