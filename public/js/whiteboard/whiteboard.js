@@ -36,15 +36,17 @@ class Whiteboard {
             }
         }
     }
-    _draw(event) {
+    _draw(event, color=null, radius=null) {
         const nextX = event.clientX - this.origin.x;
         const nextY = event.clientY - this.origin.y;
-        this.marker.draw(this.context, this.currX, this.currY, nextX, nextY);
+        this.marker.draw(this.context, this.currX, this.currY, nextX, nextY, color, radius);
         this.currX = nextX;
         this.currY = nextY;
     }
     _erase(event) {
-        console.log(event);
+        const color = this.background;
+        const radius = 5 * this.marker.getRadius();
+        this._draw(event, color, radius);
     }
     _penDown(event) {
         this.state = STATE_PEN_DOWN;
