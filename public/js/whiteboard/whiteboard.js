@@ -13,6 +13,7 @@ class Whiteboard {
         this.currX = 0;
         this.currY = 0;
         this.background = COLOR_WHITE;
+        this.buffer = {};
         // Event Handlers
         this._penDownHandler = null;
         this._penUpHandler = null;
@@ -36,26 +37,40 @@ class Whiteboard {
             }
         }
     }
-    _draw(event, color=null, radius=null) {
+    _penDown(event) {
+        this._saveBuffer();
+        this.currX = event.clientX - this.origin.x
+        this.currY = event.clientY - this.origin.y;
+        switch(this.mode) {
+            case MODE_DRAW      : break;
+            case MODE_ERASE     : this.setColor(this.background); this.setWidth(5*this.getWidth()); break;
+            case MODE_IDLE      : break;
+        }
+        this.setState(STATE_PEN_DOWN);
+    }
+    _penUp(event) {
+        this._draw(event);
+        this._loadBuffer();
+    }
+    _loadBuffer() {
+        this.setState(this.buffer.state);
+        this.setColor(this.buffer.color);
+        this.setWidth(this.buffer.width);
+    }
+    _saveBuffer() {
+        this.buffer.state = this.getState();
+        this.buffer.color = this.getColor();
+        this.buffer.width = this.getWidth();
+    }
+    _draw(event) {
         const nextX = event.clientX - this.origin.x;
         const nextY = event.clientY - this.origin.y;
-        this.marker.draw(this.context, this.currX, this.currY, nextX, nextY, color, radius);
+        this.marker.draw(this.context, this.currX, this.currY, nextX, nextY);
         this.currX = nextX;
         this.currY = nextY;
     }
     _erase(event) {
-        const color = this.background;
-        const radius = 5 * this.marker.getRadius();
-        this._draw(event, color, radius);
-    }
-    _penDown(event) {
-        this.state = STATE_PEN_DOWN;
-        this.currX = event.clientX - this.origin.x
-        this.currY = event.clientY - this.origin.y;
-    }
-    _penUp(event) {
         this._draw(event);
-        this.state = STATE_PEN_UP;
     }
     startEventLoop() {
         if (this._penDownHandler===null)        {  this._penDownHandler = this._penDown.bind(this); }
@@ -78,13 +93,30 @@ class Whiteboard {
         this.context.fillRect(0, 0, this.width, this.height);
         this.context.globalCompositeOperation = 'source-over';
     }
+
+    // setters and getters
     setColor(color) {
         this.marker.setColor(this.context, color);
+    }
+    getColor() {
+        return this.marker.getColor();
     }
     setWidth(width) {
         this.marker.setRadius(width);
     }
+    getWidth() {
+        return this.marker.getRadius();
+    }
     setMode(mode) {
         this.mode = mode;
+    }
+    getMode() {
+        return this.mode;
+    }
+    setState(state) {
+        this.state = state;
+    }
+    getState() {
+        return this.state;
     }
 };
