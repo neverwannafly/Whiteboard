@@ -16,10 +16,10 @@ class Marker {
     getRadius() {
         return this.radius;
     }
-    draw(context, x1, y1, x2, y2) {
+    draw(context, x1, y1, x2, y2, color=null, radius=null) {
         context.beginPath();
-        context.strokeStyle = this.color;
-        context.lineWidth = this.radius;
+        context.strokeStyle = color || this.color;
+        context.lineWidth = radius || this.radius;
         context.moveTo(x1, y1);
         context.lineTo(x2, y2);
         context.stroke();
