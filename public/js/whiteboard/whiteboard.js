@@ -86,9 +86,9 @@ class Whiteboard {
         if (this._executeActionHandler===null)  { this._executeActionHandler = this._executeAction.bind(this); }
         if (this._penUpHandler===null)          { this._penUpHandler = this._penUp.bind(this); }
         if (this._windowChangeHandler===null)         { this._windowChangeHandler = this._windowChange.bind(this); }
-        this.canvas.addEventListener('mousedown', this._penDownHandler, true);
-        this.canvas.addEventListener('mousemove', this._executeActionHandler, true);
-        this.canvas.addEventListener('mouseup', this._penUpHandler, true);
+        this.canvas.addEventListener('mousedown touchstart', this._penDownHandler, true);
+        this.canvas.addEventListener('mousemove touchmove', this._executeActionHandler, true);
+        this.canvas.addEventListener('mouseup touchend', this._penUpHandler, true);
         window.addEventListener('resize', this._windowChangeHandler, true);
     }
     stopEventLoop() {
