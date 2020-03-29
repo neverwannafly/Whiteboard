@@ -1,16 +1,32 @@
 body {
     font-family: sans-serif;
+    background-color: #101820FF;
+    margin: 0px;
+    padding: 0px;
 }
-
+.icons {
+    color: white;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30%;
+    margin-bottom: 30%;
+}
+#toolbar {
+    /* padding-top: 14%; */
+    align-items: center;
+    align-self: center;
+    min-width: 60px;
+    width: 5%;
+    background-color: black;
+    /* background-color: wheat; */
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
 .wrapper {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translateX(-50%) translateY(-50%);
-    -webkit-transform: translate(-50%,-50%);
-    transform: translate(-50%,-50%);
+    display: flex;
 }
 
 canvas {
-    border: 1px solid black;
+    border : 3px black thick;
 }

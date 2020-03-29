@@ -2,9 +2,9 @@
 
     const canvas = document.getElementById("whiteboard");
 
-    const resolution = RESOLUTION_HIGH;
-    const height = window.innerHeight * 0.95;
-    const width = window.outerWidth * 0.95;
+    const resolution = RESOLUTION_HD;
+    const height = window.innerHeight * 0.99;
+    const width = window.innerWidth * 0.93;
     
     let whiteboard = new Whiteboard(canvas, width, height, resolution);
     whiteboard.setColor(COLOR_WHITE);
