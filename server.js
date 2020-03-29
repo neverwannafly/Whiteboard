@@ -7,7 +7,7 @@ app.use('/static', express.static(path.join(__dirname, 'public')))
 app.set('view engine', 'pug');
 
 app.get('/', (req, res) => {
-    res.render('index');
+    res.render('index', {title:'EaseBoard'});
 });
 
 app.listen(port, () => console.log(`listening on port ${port}`));
