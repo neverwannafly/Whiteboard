@@ -14,6 +14,7 @@ class Whiteboard {
         this.currY = 0;
         this.background = COLOR_WHITE;
         this.buffer = {};
+        this.cursor = null;
         // Event Handlers
         this._penDownHandler = null;
         this._penUpHandler = null;
@@ -127,5 +128,9 @@ class Whiteboard {
     }
     getState() {
         return this.state;
+    }
+    setCursor(cursor) {
+        this.cursor = cursor;
+        this.canvas.style.cursor = this.cursor;
     }
 };

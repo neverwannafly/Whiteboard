@@ -7,9 +7,10 @@
     const width = window.outerWidth * 0.95;
     
     let whiteboard = new Whiteboard(canvas, width, height, resolution);
-    whiteboard.setColor(COLOR_ULTRA_VIOLET);
-    whiteboard.setBackground(COLOR_BLOOMING_DAHILA);
+    whiteboard.setColor(COLOR_WHITE);
+    whiteboard.setBackground(COLOR_BLACK);
     whiteboard.setWidth(2);
+    whiteboard.setCursor(CURSOR_CROSSHAIR);
     whiteboard.setMode(MODE_DRAW);
 
     whiteboard.startEventLoop();

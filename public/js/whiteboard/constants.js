@@ -27,3 +27,6 @@ const MODE_LINE                     =       0b0011;
 // Whiteboard States
 const STATE_PEN_UP                  =       false;
 const STATE_PEN_DOWN                =       true;
+
+// CURSORS
+const CURSOR_CROSSHAIR              =       "crosshair";

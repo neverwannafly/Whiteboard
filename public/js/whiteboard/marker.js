@@ -7,6 +7,8 @@ class Marker {
         this.color = color;
         context.fillStyle = this.color;
         context.strokeStyle = this.color;
+        context.lineJoin = "round";
+        context.lineCap = "round";
     }
     setRadius(context, radius) {
         this.radius = radius;
