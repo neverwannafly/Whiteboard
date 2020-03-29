@@ -11,6 +11,13 @@ body {
     margin-top: 30%;
     margin-bottom: 30%;
 }
+#color {
+    overflow: hidden;
+}
+.color-icons {
+    height: 32px;
+    width: 32px;
+}
 #toolbar {
     /* padding-top: 14%; */
     align-items: center;
@@ -22,6 +29,7 @@ body {
     display: flex;
     flex-direction: column;
     cursor: pointer;
+    z-index: 1000;
 }
 .wrapper {
     display: flex;
@@ -29,4 +37,5 @@ body {
 
 canvas {
     border : 3px black thick;
+    z-index: 1;
 }
