@@ -42,7 +42,9 @@ function getColorPicker(event) {
     newDiv.style.left = `${event.pageX+35}px`;
     newDiv.style.top = `${event.pageY-10}px`;
     newDiv.style.backgroundColor = 'white';
-    const colors = [COLOR_BLOOMING_DAHILA, COLOR_ORANGE, COLOR_RED, COLOR_WHITE, COLOR_PINK, COLOR_LIGHT_BLUE];
+    const colors = [
+        COLOR_FIERY_RED,COLOR_BLAZING_YELLOW,COLOR_ISLAND_GREEN,COLOR_WHITE,COLOR_INCA_GOLD,COLOR_ATOLL_BLUE,COLOR_PURPLE
+    ];
     newDiv.style.height = '32px';
     newDiv.style.width = `${colors.length*32}px`;
     newDiv.style.display = 'flex';
