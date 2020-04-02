@@ -1,8 +1,13 @@
+let socket = io();
+
 const canvas = document.getElementById("whiteboard");
 
 const resolution = RESOLUTION_HD;
 const height = window.innerHeight * 0.99;
 const width = window.innerWidth * 0.93;
+const window_url = window.location.href;
+// const game_index = window_url.indexOf('game/') + 4;
+const game_socket = io.connect(window_url);
 
 let whiteboard = new Whiteboard(canvas, width, height, resolution);
 whiteboard.setColor(COLOR_WHITE);
@@ -17,18 +22,45 @@ let pen = document.getElementById('pen');
 let color = document.getElementById('color');
 let eraser = document.getElementById('eraser');
 let line = document.getElementById('line');
+let mic = document.getElementById('audio');
+let trash = document.getElementById('delete');
+let highlightedCell;
 
 color.addEventListener('click', getColorPicker);
-pen.addEventListener('click', function(_){
+pen.addEventListener('click', function(event){
+    unhighlightCell();
     whiteboard.setMode(MODE_DRAW);
+    highlightCell(event);
     // event.target.style.backgroundColor = COLOR_RED;
 });
-eraser.addEventListener('click', function(_){
+eraser.addEventListener('click', function(event){
+    unhighlightCell();
     whiteboard.setMode(MODE_ERASE);
+    highlightCell(event);
 });
-line.addEventListener('click', function(_){
+line.addEventListener('click', function(event){
+    unhighlightCell();
     whiteboard.setMode(MODE_LINE);
+    highlightCell(event);
 });
+mic.addEventListener('click', function(event){
+    unhighlightCell();
+    highlightCell(event);
+});
+trash.addEventListener('click', function(event) {
+    whiteboard.resetBoard();
+});
+
+function unhighlightCell() {
+    let target = document.getElementById(highlightedCell);
+    if (target) { target.style.background = COLOR_BLACK; }
+}
+
+function highlightCell(event) {
+    let target = event.target;
+    highlightedCell = target.id;
+    target.style.background = COLOR_FIERY_RED;
+}
 
 function getColorPicker(event) {
     let newDiv = document.getElementById('color-panel');
