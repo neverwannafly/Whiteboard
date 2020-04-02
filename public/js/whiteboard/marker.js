@@ -24,7 +24,7 @@ class Marker {
         context.beginPath();
         context.moveTo(x1, y1);
         context.lineTo(x2, y2);
-        context.stroke();
         context.closePath();
+        context.stroke();
     }
 }
