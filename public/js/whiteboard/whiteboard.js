@@ -15,12 +15,17 @@ class Whiteboard {
         this.background = COLOR_WHITE;
         this.buffer = {};
         this.cursor = null;
-        // Event Handlers
+        // Mouse event Handlers
         this._penDownHandler = null;
         this._penUpHandler = null;
         this._executeActionHandler = null;
         this._mouseLeaveHandler = null;
         this._windowChangeHandler = null;
+        // Touch event Handlers
+        this._touchDownHandler = null;
+        this._touchUpHandler = null;
+        this._executeTouchActionHandler = null;
+        this._touchCancelHandler = null;
     }
     _setupContextBoard() {
         this.canvas.style.width = `${this.width}px`;
@@ -43,8 +48,17 @@ class Whiteboard {
     }
     _penDown(event) {
         this._saveBuffer();
-        this.currX = event.pageX - this.origin.x
-        this.currY = event.pageY - this.origin.y;
+        console.log(event);
+        let clientX, clientY;
+        if (event.touches) { 
+            clientX = event.touches[0].pageX; 
+            clientY = event.touches[0].pageY; 
+        } else {
+            clientX = event.pageX; 
+            clientY = event.pageY;
+        }
+        this.currX = clientX - this.origin.x
+        this.currY = clientY - this.origin.y;
         this.setState(STATE_PEN_DOWN);
     }
     _penUp(event) {
@@ -58,6 +72,31 @@ class Whiteboard {
     _mouseLeave() {
         this._loadBuffer();
     }
+    _touchUp(event) {
+        this._penUp(event);
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    _touchDown(event) {
+        this._penDown(event);
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    _executeTouchAction(event) {
+        this._executeAction(event);
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    _touchCancel(event) {
+        this._mouseLeave();
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    _sizeChange(event) {
+        this._windowChange();
+        event.preventDefault();
+        event.stopPropagation();
+    }
     _loadBuffer() {
         this.setState(this.buffer.state);
         this.setColor(this.buffer.color);
@@ -69,8 +108,17 @@ class Whiteboard {
         this.buffer.width = this.getWidth();
     }
     _draw(event) {
-        const nextX = event.pageX - this.origin.x;
-        const nextY = event.pageY - this.origin.y;
+        let clientX, clientY;
+        console.log(event);
+        if (event.touches) { 
+            clientX = event.touches[0].pageX; 
+            clientY = event.touches[0].pageY; 
+        } else {
+            clientX = event.pageX; 
+            clientY = event.pageY;
+        }
+        const nextX = clientX - this.origin.x;
+        const nextY = clientY - this.origin.y;
         this.marker.draw(this.context, this.currX, this.currY, nextX, nextY);
         this.currX = nextX;
         this.currY = nextY;
@@ -86,15 +134,23 @@ class Whiteboard {
         console.log("making line! Keep going");
     }
     startEventLoop() {
-        if (this._penDownHandler===null)        {  this._penDownHandler = this._penDown.bind(this); }
-        if (this._executeActionHandler===null)  { this._executeActionHandler = this._executeAction.bind(this); }
-        if (this._penUpHandler===null)          { this._penUpHandler = this._penUp.bind(this); }
-        if (this._mouseLeaveHandler===null)     { this._mouseLeaveHandler = this._mouseLeave.bind(this); }
-        if (this._windowChangeHandler===null)   { this._windowChangeHandler = this._windowChange.bind(this); }
+        if (this._penDownHandler===null)                { this._penDownHandler = this._penDown.bind(this); }
+        if (this._executeActionHandler===null)          { this._executeActionHandler = this._executeAction.bind(this); }
+        if (this._penUpHandler===null)                  { this._penUpHandler = this._penUp.bind(this); }
+        if (this._mouseLeaveHandler===null)             { this._mouseLeaveHandler = this._mouseLeave.bind(this); }
+        if (this._windowChangeHandler===null)           { this._windowChangeHandler = this._windowChange.bind(this); }
+        if (this._touchDownHandler === null)            { this._touchDownHandler = this._touchDown.bind(this); }
+        if (this._touchUpHandler === null)              { this._touchUpHandler = this._touchUp.bind(this); }
+        if (this._executeTouchActionHandler === null)   { this._executeTouchActionHandler = this._executeTouchAction.bind(this); }
+        if (this._touchCancelHandler === null)          { this._touchCancelHandler = this._touchCancel.bind(this); }
         this.canvas.addEventListener('mousedown', this._penDownHandler, true);
         this.canvas.addEventListener('mousemove', this._executeActionHandler, true);
         this.canvas.addEventListener('mouseup', this._penUpHandler, true);
         this.canvas.addEventListener('mouseleave', this._mouseLeaveHandler, true);
+        this.canvas.addEventListener('touchstart', this._touchDownHandler, true);
+        this.canvas.addEventListener('touchend', this._touchUpHandler, true);
+        this.canvas.addEventListener('touchmove', this._executeTouchActionHandler, true);
+        this.canvas.addEventListener('touchcancel', this._touchCancelHandler, true);
         window.addEventListener('resize', this._windowChangeHandler, true);
     }
     stopEventLoop() {

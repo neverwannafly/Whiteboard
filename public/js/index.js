@@ -5,9 +5,9 @@ const canvas = document.getElementById("whiteboard");
 const resolution = RESOLUTION_HD;
 const height = window.innerHeight * 0.99;
 const width = window.innerWidth * 0.93;
-const window_url = window.location.href;
+const windowUrl = window.location.href;
 // const game_index = window_url.indexOf('game/') + 4;
-const game_socket = io.connect(window_url);
+const boardSocket = io.connect(windowUrl);
 
 let whiteboard = new Whiteboard(canvas, width, height, resolution);
 whiteboard.setColor(COLOR_WHITE);
