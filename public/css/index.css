@@ -5,7 +5,7 @@ body {
     padding: 0px;
 }
 .icons {
-    background-color: rgb(47, 0, 47);
+    background-color: black;
     color: white;
     margin-left: auto;
     margin-right: auto;
@@ -31,7 +31,7 @@ body {
     align-self: center;
     min-width: 60px;
     width: 5%;
-    background-color: rgb(47, 0, 47);
+    background-color: black;
     /* background-color: wheat; */
     display: flex;
     flex-direction: column;
