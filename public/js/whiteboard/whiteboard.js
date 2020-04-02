@@ -111,7 +111,14 @@ class Whiteboard {
         this.context.fillRect(0, 0, this.width, this.height);
         this.context.globalCompositeOperation = 'source-over';
     }
-
+    resetBoard() {
+        this.context = this._setupContextBoard();
+        this.setCursor(this.cursor);
+        this.setBackground(this.background);
+        this.setMode(this.mode);
+        this.setColor(this.marker.color);
+        this.setWidth(this.marker.radius);
+    }
     // setters and getters
     setColor(color) {
         this.marker.setColor(this.context, color);
