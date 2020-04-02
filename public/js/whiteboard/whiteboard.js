@@ -19,6 +19,7 @@ class Whiteboard {
         this._penDownHandler = null;
         this._penUpHandler = null;
         this._executeActionHandler = null;
+        this._mouseLeaveHandler = null;
         this._windowChangeHandler = null;
     }
     _setupContextBoard() {
@@ -54,6 +55,9 @@ class Whiteboard {
         console.log("changed");
         this.origin = this.canvas.getBoundingClientRect();
     }
+    _mouseLeave() {
+        this._loadBuffer();
+    }
     _loadBuffer() {
         this.setState(this.buffer.state);
         this.setColor(this.buffer.color);
@@ -85,16 +89,19 @@ class Whiteboard {
         if (this._penDownHandler===null)        {  this._penDownHandler = this._penDown.bind(this); }
         if (this._executeActionHandler===null)  { this._executeActionHandler = this._executeAction.bind(this); }
         if (this._penUpHandler===null)          { this._penUpHandler = this._penUp.bind(this); }
-        if (this._windowChangeHandler===null)         { this._windowChangeHandler = this._windowChange.bind(this); }
+        if (this._mouseLeaveHandler===null)     { this._mouseLeaveHandler = this._mouseLeave.bind(this); }
+        if (this._windowChangeHandler===null)   { this._windowChangeHandler = this._windowChange.bind(this); }
         this.canvas.addEventListener('mousedown', this._penDownHandler, true);
         this.canvas.addEventListener('mousemove', this._executeActionHandler, true);
         this.canvas.addEventListener('mouseup', this._penUpHandler, true);
+        this.canvas.addEventListener('mouseleave', this._mouseLeaveHandler, true);
         window.addEventListener('resize', this._windowChangeHandler, true);
     }
     stopEventLoop() {
         this.canvas.removeEventListener('mousedown', this._penDownHandler, true);
         this.canvas.removeEventListener('mousemove', this._executeActionHandler, true);
         this.canvas.removeEventListener('mouseup', this._penUpHandler, true);
+        this.canvas.removeEventListener('mouseleave', this._mouseLeaveHandler, true);
         window.removeEventListener('resize', this._windowChangeHandler, true);
     }    
     setBackground(background) {
