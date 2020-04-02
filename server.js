@@ -1,13 +1,20 @@
 const express = require('express');
 const path = require('path');
-const app = express();
+const socketio = require('socket.io');
 const port = process.env.PORT || 3000;
+
+const app = express();
 
 app.use('/static', express.static(path.join(__dirname, 'public')))
 app.set('view engine', 'pug');
 
 app.get('/', (req, res) => {
-    res.render('index', {title:'EaseBoard'});
+    console.log(req);
+    res.render('workspace', {title:'EaseBoard'});
 });
 
-app.listen(port, () => console.log(`listening on port ${port}`));
+let server = app.listen(port, () => console.log(`listening on port ${port}`));
+const io = socketio.listen(server);
+io.on('connection', function(socket){
+    console.log("Hello World");
+});
