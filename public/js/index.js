@@ -16,9 +16,9 @@ whiteboard.setWidth(3);
 whiteboard.setCursor(CURSOR_CROSSHAIR);
 whiteboard.setMode(MODE_DRAW);
 
-whiteboard.attachSocket(boardSocket, 'draw', FUNCTION_DRAW);
-whiteboard.attachSocket(boardSocket, 'penup', FUNCTION_PENUP);
-whiteboard.attachSocket(boardSocket, 'pendown', FUNCTION_PENDOWN);
+// whiteboard.attachSocket(boardSocket, 'draw', FUNCTION_DRAW);
+// whiteboard.attachSocket(boardSocket, 'penup', FUNCTION_PENUP);
+// whiteboard.attachSocket(boardSocket, 'pendown', FUNCTION_PENDOWN);
 whiteboard.startEventLoop();
 
 let pen = document.getElementById('pen');
