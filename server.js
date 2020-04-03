@@ -13,8 +13,11 @@ app.get('/', (req, res) => {
     res.render('workspace', {title:'EaseBoard'});
 });
 
-let server = app.listen(port, () => console.log(`listening on port ${port}`));
+let server = app.listen(port, () => console.log(`running on localhost:${port}`));
 const io = socketio.listen(server);
 io.on('connection', function(socket){
     console.log("Hello World");
+    socket.on('draw', function(val){ console.log(val); });
+    // socket.on('penup', function(val){ console.log(val); });
+    // socket.on('pendown', function(val){ console.log(val); });
 });

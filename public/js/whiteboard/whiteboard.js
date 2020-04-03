@@ -48,7 +48,6 @@ class Whiteboard {
     }
     _penDown(event) {
         this._saveBuffer();
-        console.log(event);
         let clientX, clientY;
         if (event.touches) { 
             clientX = event.touches[0].pageX; 
@@ -109,7 +108,6 @@ class Whiteboard {
     }
     _draw(event) {
         let clientX, clientY;
-        console.log(event);
         if (event.touches) { 
             clientX = event.touches[0].pageX; 
             clientY = event.touches[0].pageY; 
@@ -158,6 +156,10 @@ class Whiteboard {
         this.canvas.removeEventListener('mousemove', this._executeActionHandler, true);
         this.canvas.removeEventListener('mouseup', this._penUpHandler, true);
         this.canvas.removeEventListener('mouseleave', this._mouseLeaveHandler, true);
+        this.canvas.removeEventListener('touchstart', this._touchDownHandler, true);
+        this.canvas.removeEventListener('touchend', this._touchUpHandler, true);
+        this.canvas.removeEventListener('touchmove', this._executeTouchActionHandler, true);
+        this.canvas.removeEventListener('touchcancel', this._touchCancelHandler, true);
         window.removeEventListener('resize', this._windowChangeHandler, true);
     }    
     setBackground(background) {
@@ -174,6 +176,26 @@ class Whiteboard {
         this.setMode(this.mode);
         this.setColor(this.marker.color);
         this.setWidth(this.marker.radius);
+    }
+    attachSocket(socket, socketName, functionType) {
+        switch (functionType) {
+            case FUNCTION_DRAW: {
+                let draw = this._draw.bind(this);
+                this._draw = function(event) {
+                    draw(event);
+                    let payload = {x:this.currX, y:this.currY, c:this.getColor(), w:this.getWidth()};
+                    socket.emit(socketName, payload);
+                }
+            }
+            case FUNCTION_PENDOWN: {
+                let penDown = this._penDown.bind(this);
+                this._penDown = function(event) {
+                    penDown(event);
+                    let payload = {x:this.currX, y:this.currY, c:this.getColor(), w:this.getWidth()};
+                    socket.emit(socketName, payload);
+                }
+            }
+        };
     }
     // setters and getters
     setColor(color) {

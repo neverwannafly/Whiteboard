@@ -12,26 +12,37 @@ const boardSocket = io.connect(windowUrl);
 let whiteboard = new Whiteboard(canvas, width, height, resolution);
 whiteboard.setColor(COLOR_WHITE);
 whiteboard.setBackground(COLOR_BLACK);
-whiteboard.setWidth(2);
+whiteboard.setWidth(3);
 whiteboard.setCursor(CURSOR_CROSSHAIR);
 whiteboard.setMode(MODE_DRAW);
 
+whiteboard.attachSocket(boardSocket, 'draw', FUNCTION_DRAW);
+whiteboard.attachSocket(boardSocket, 'penup', FUNCTION_PENUP);
+whiteboard.attachSocket(boardSocket, 'pendown', FUNCTION_PENDOWN);
 whiteboard.startEventLoop();
 
 let pen = document.getElementById('pen');
 let color = document.getElementById('color');
+let plus = document.getElementById('plus');
+let minus = document.getElementById('minus');
 let eraser = document.getElementById('eraser');
 let line = document.getElementById('line');
 let mic = document.getElementById('audio');
 let trash = document.getElementById('delete');
 let highlightedCell;
+let whiteboardWidth = whiteboard.getWidth();
 
 color.addEventListener('click', getColorPicker);
 pen.addEventListener('click', function(event){
     unhighlightCell();
     whiteboard.setMode(MODE_DRAW);
     highlightCell(event);
-    // event.target.style.backgroundColor = COLOR_RED;
+});
+plus.addEventListener('click', function(){
+    whiteboard.setWidth(++whiteboardWidth);    ;
+});
+minus.addEventListener('click', function(){
+    whiteboard.setWidth(--whiteboardWidth);
 });
 eraser.addEventListener('click', function(event){
     unhighlightCell();

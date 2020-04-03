@@ -35,3 +35,8 @@ const STATE_PEN_DOWN                =       true;
 
 // CURSORS
 const CURSOR_CROSSHAIR              =       "crosshair";
+
+// Function Types
+const FUNCTION_DRAW                 =       1;
+const FUNCTION_PENUP                =       2;
+const FUNCTION_PENDOWN              =       3;
